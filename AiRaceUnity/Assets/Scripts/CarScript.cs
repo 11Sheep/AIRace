@@ -15,6 +15,8 @@ public class CarScript : MonoBehaviour
     
     [SerializeField] private float _wheelReturnForce = 0.1f;
     
+    [SerializeField] private float _wheelRotetaForce = 0.5f;
+    
     /// <summary>
     /// Car force
     /// </summary>
@@ -73,7 +75,7 @@ public class CarScript : MonoBehaviour
         //transform.GetChild(0).localEulerAngles = new Vector3(0, _frontWheelCurrentAngle, 0);
 
         // Apply friction
-        if (Math.Abs(_currentForce) < _lowerForceLimitToStop)
+        if (Math.Abs(_currentForce) <= _lowerForceLimitToStop)
         {
             _currentForce = 0;
         }
@@ -111,7 +113,15 @@ public class CarScript : MonoBehaviour
         // Turn the car only if the car is moving
         if ((_currentForce != 0) && (_frontWheelCurrentAngle != 0)) 
         {
-            transform.Rotate(0, _frontWheelCurrentAngle, 0);
+            if (_frontWheelCurrentAngle > 0)
+            {
+                transform.Rotate(0, _wheelRotetaForce, 0);    
+            }
+            else
+            {
+                transform.Rotate(0, -_wheelRotetaForce, 0);
+            }
+            
         }
 
     }
