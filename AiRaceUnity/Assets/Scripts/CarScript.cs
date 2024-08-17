@@ -17,6 +17,8 @@ public class CarScript : MonoBehaviour
     
     [SerializeField] private float _wheelRotetaForce = 0.5f;
     
+    [SerializeField] private TriggerCollector _triggerCollector;
+    
     /// <summary>
     /// Car force
     /// </summary>
@@ -26,6 +28,21 @@ public class CarScript : MonoBehaviour
     /// Front wheel current angle
     /// </summary>
     private float _frontWheelCurrentAngle = 0;
+    
+    /// <summary>
+    /// Callback for the parent to know when the car hit a marker
+    /// </summary>
+    private Action<MarkerScript> _carHitMarker;
+    
+    private void Start()
+    {
+        _triggerCollector.SetTriggerEnterAction(TriggerEnterOnCar);
+    }
+    
+    public void Initialize(Action<MarkerScript> carHitMarker)
+    {
+        _carHitMarker = carHitMarker;
+    }
     
     /// <summary>
     /// Move the car forward or backward, force is between -1 to 1
@@ -83,13 +100,13 @@ public class CarScript : MonoBehaviour
         {
             _currentForce -= _fictionForce;
             
-            Debug.Log("Current force: " + _currentForce);
+            //Debug.Log("Current force: " + _currentForce);
         }
         else if (_currentForce < 0)
         {
             _currentForce += _fictionForce;
             
-            Debug.Log("Current force: " + _currentForce);
+            //Debug.Log("Current force: " + _currentForce);
         }
         
         // Return wheel to 0 angle
@@ -101,13 +118,13 @@ public class CarScript : MonoBehaviour
         {
             _frontWheelCurrentAngle -= _wheelReturnForce;
             
-            Debug.Log("_frontWheelCurrentAngle: " + _frontWheelCurrentAngle);
+            //Debug.Log("_frontWheelCurrentAngle: " + _frontWheelCurrentAngle);
         }
         else if (_frontWheelCurrentAngle < 0)
         {
             _frontWheelCurrentAngle += _wheelReturnForce;
             
-            Debug.Log("_frontWheelCurrentAngle: " + _frontWheelCurrentAngle);
+            //Debug.Log("_frontWheelCurrentAngle: " + _frontWheelCurrentAngle);
         }
         
         // Turn the car only if the car is moving
@@ -124,5 +141,16 @@ public class CarScript : MonoBehaviour
             
         }
 
+    }
+
+    private void TriggerEnterOnCar(Collider other)
+    {
+        // Get the gameobject that the car collided with
+        if (other.gameObject.GetComponent<MarkerScript>() != null)
+        {
+            MarkerScript marker = other.gameObject.GetComponent<MarkerScript>();
+            
+            _carHitMarker?.Invoke(marker);
+        }
     }
 }

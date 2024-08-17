@@ -45,9 +45,12 @@
     <Analyzer Include="C:\Program Files\2022.3.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\MarkerScript.cs" />
     <Compile Include="Assets\Scripts\AppConfiguration.cs" />
     <Compile Include="Assets\Scripts\CarScript.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\TriggerCollector.cs" />
     <None Include="Assets\Parking_Game\Shaders\SpriteTileShader.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\2022.3.36f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
