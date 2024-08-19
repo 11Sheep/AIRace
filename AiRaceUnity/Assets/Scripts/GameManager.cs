@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -72,5 +73,15 @@ public class GameManager : MonoBehaviour
     private void OnCarTrackTrigger(Collider colider, bool isEnter)
     {
         Debug.Log("Track trigger changed: " + isEnter);
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("collision enter: " + other.gameObject.name);
+    }
+    
+    private void OnCollisionExit(Collision other)
+    {
+        Debug.Log("collision exit: " + other.gameObject.name);
     }
 }

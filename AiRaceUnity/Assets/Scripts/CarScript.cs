@@ -87,9 +87,14 @@ public class CarScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // Move the car forward or backward
-        _rigidbody.AddForce(transform.forward * _currentForce * 100, ForceMode.Acceleration);
+        _rigidbody.angularVelocity = Vector3.zero;
         
+        // Move the car forward or backward
+        if (_currentForce != 0)
+        {
+            _rigidbody.AddForce(transform.forward * _currentForce * 100, ForceMode.Acceleration);
+        }
+
         // Rotate the front wheels
         //transform.GetChild(0).localEulerAngles = new Vector3(0, _frontWheelCurrentAngle, 0);
 
@@ -98,19 +103,19 @@ public class CarScript : MonoBehaviour
         {
             _currentForce = 0;
             
-            Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
+            //Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         else if (_currentForce > 0)
         {
             _currentForce -= _fictionForce;
             
-            Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
+            //Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         else if (_currentForce < 0)
         {
             _currentForce += _fictionForce;
             
-            Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
+            //Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         
         // Return wheel to 0 angle
@@ -158,8 +163,13 @@ public class CarScript : MonoBehaviour
         }
     }
     
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Car hit something");
+        Debug.Log("collision enter: " + other.gameObject.name);
+    }
+    
+    private void OnCollisionExit(Collision other)
+    {
+        Debug.Log("collision exit: " + other.gameObject.name);
     }
 }
