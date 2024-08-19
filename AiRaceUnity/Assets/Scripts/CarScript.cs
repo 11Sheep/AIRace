@@ -19,6 +19,8 @@ public class CarScript : MonoBehaviour
     
     [SerializeField] private TriggerCollector _triggerCollector;
     
+    [SerializeField] private Rigidbody _rigidbody;
+    
     /// <summary>
     /// Car force
     /// </summary>
@@ -86,7 +88,7 @@ public class CarScript : MonoBehaviour
     private void FixedUpdate()
     {
         // Move the car forward or backward
-        transform.position += transform.forward * _currentForce;
+        _rigidbody.AddForce(transform.forward * _currentForce * 100, ForceMode.Acceleration);
         
         // Rotate the front wheels
         //transform.GetChild(0).localEulerAngles = new Vector3(0, _frontWheelCurrentAngle, 0);
@@ -95,18 +97,20 @@ public class CarScript : MonoBehaviour
         if (Math.Abs(_currentForce) <= _lowerForceLimitToStop)
         {
             _currentForce = 0;
+            
+            Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         else if (_currentForce > 0)
         {
             _currentForce -= _fictionForce;
             
-            //Debug.Log("Current force: " + _currentForce);
+            Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         else if (_currentForce < 0)
         {
             _currentForce += _fictionForce;
             
-            //Debug.Log("Current force: " + _currentForce);
+            Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         
         // Return wheel to 0 angle
@@ -143,7 +147,7 @@ public class CarScript : MonoBehaviour
 
     }
 
-    private void TriggerEnterOnCar(Collider other)
+    private void TriggerEnterOnCar(Collider other, bool isEnter)
     {
         // Get the gameobject that the car collided with
         if (other.gameObject.GetComponent<MarkerScript>() != null)
@@ -152,5 +156,10 @@ public class CarScript : MonoBehaviour
             
             _carHitMarker?.Invoke(marker);
         }
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Car hit something");
     }
 }

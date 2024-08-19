@@ -13,30 +13,36 @@ public class GameManager : MonoBehaviour
     /// </summary>
     [SerializeField] private MarkerScript[] _markers;
     
+    /// <summary>
+    /// This will be used to 
+    /// </summary>
+    [SerializeField] private TriggerCollector _outerTrackTriggerCollector;
+    
     private int _currentMarkerIndex = 0;
     
     private void Start()
     {
         _carScript.Initialize(CarHitMarker);
+        _outerTrackTriggerCollector.SetTriggerEnterAction(OnCarTrackTrigger);
     }
-    
+
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             _carScript.Move(_forceToAdd);
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.DownArrow))
         {
             _carScript.Move(-_forceToAdd);
         }
         
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
             _carScript.SetWheelAngle(-10);
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             _carScript.SetWheelAngle(10);
         }
@@ -48,11 +54,23 @@ public class GameManager : MonoBehaviour
     /// <param name="marker"></param>
     private void CarHitMarker(MarkerScript marker)
     {
+        if (_currentMarkerIndex >= _markers.Length)
+        {
+            Debug.Log("We hit all the markers");
+            
+            return;
+        }
+        
         if (_markers[_currentMarkerIndex] == marker)
         {
             Debug.Log("We hit the correct marker, # " + _currentMarkerIndex);
             
             _currentMarkerIndex++;
         }
+    }
+    
+    private void OnCarTrackTrigger(Collider colider, bool isEnter)
+    {
+        Debug.Log("Track trigger changed: " + isEnter);
     }
 }
