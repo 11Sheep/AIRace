@@ -45,11 +45,18 @@
     <Analyzer Include="C:\Program Files\2022.3.36f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Utils\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Utils\JsonHelper.cs" />
     <Compile Include="Assets\Scripts\MarkerScript.cs" />
     <Compile Include="Assets\Scripts\AppConfiguration.cs" />
     <Compile Include="Assets\Scripts\CarScript.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Utils\FPSCounter.cs" />
+    <Compile Include="Assets\Scripts\Utils\EventManagerScript.cs" />
+    <Compile Include="Assets\Scripts\Utils\AnalyticUtils.cs" />
+    <Compile Include="Assets\Scripts\Utils\Singleton\Singleton.cs" />
+    <Compile Include="Assets\Scripts\Utils\Singleton\MonoBehaviourExtended.cs" />
     <Compile Include="Assets\Scripts\TriggerCollector.cs" />
     <None Include="Assets\Parking_Game\Shaders\SpriteTileShader.shader" />
     <Reference Include="UnityEngine">
@@ -712,6 +719,9 @@
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Mixpanel.Editor">
+      <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Mixpanel.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.State.Editor">
       <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
     </Reference>
@@ -747,6 +757,9 @@
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Mixpanel">
+      <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Mixpanel.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow">
       <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>

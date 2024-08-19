@@ -641,6 +641,9 @@
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
     </Reference>
+    <Reference Include="Mixpanel">
+      <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Mixpanel.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Flow">
       <HintPath>C:\Users\Lior\Documents\UnityProjects\AIRace\AiRaceUnity\Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
     </Reference>
