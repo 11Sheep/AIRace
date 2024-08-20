@@ -21,6 +21,8 @@ public class CarScript : MonoBehaviour
     
     [SerializeField] private Rigidbody _rigidbody;
     
+    [SerializeField] private float _maxWheelAngel = 30;
+    
     /// <summary>
     /// Car force
     /// </summary>
@@ -52,16 +54,19 @@ public class CarScript : MonoBehaviour
     /// <param name="force"></param>
     public void Move(float force)
     {
-        _currentForce += force;
+        if (_rigidbody.velocity.magnitude < 10)
+        {
+            _currentForce += force;
 
-        // Limit the force to the maximum force
-        if (_currentForce > _maxForce)
-        {
-            _currentForce = _maxForce;
-        }
-        else if (_currentForce < -_maxForce)
-        {
-            _currentForce = -_maxForce;
+            // Limit the force to the maximum force
+            if (_currentForce > _maxForce)
+            {
+                _currentForce = _maxForce;
+            }
+            else if (_currentForce < -_maxForce)
+            {
+                _currentForce = -_maxForce;
+            }
         }
     }
     
@@ -71,18 +76,18 @@ public class CarScript : MonoBehaviour
     /// <param name="angle"></param>
     public void SetWheelAngle(float angle)
     {
-        // Verify that the angle is between -30 and 30
-        if (angle < -30)
-        {
-            angle = -30;
-        }
-        else if (angle > 30)
-        {
-            angle = 30;
-        }
-        
         // Set the angle of the front wheels
-        _frontWheelCurrentAngle = angle;
+        _frontWheelCurrentAngle += angle;
+        
+        // Verify that the angle is between -30 and 30
+        if (_frontWheelCurrentAngle < -_maxWheelAngel)
+        {
+            _frontWheelCurrentAngle = -_maxWheelAngel;
+        }
+        else if (_frontWheelCurrentAngle > _maxWheelAngel)
+        {
+            _frontWheelCurrentAngle = _maxWheelAngel;
+        }
     }
 
     private void FixedUpdate()
@@ -92,7 +97,41 @@ public class CarScript : MonoBehaviour
         // Move the car forward or backward
         if (_currentForce != 0)
         {
-            _rigidbody.AddForce(transform.forward * _currentForce * 100, ForceMode.Acceleration);
+            // Move forward or backward
+            Vector3 forwardMovement = transform.forward * _currentForce * Time.fixedDeltaTime * 10;
+            //_rigidbody.MovePosition(_rigidbody.position + forwardMovement);
+            
+            // Calculate the forward angle with 10 degreees to the right 
+            //Vector3 rightMovement = Quaternion.Euler(0, 10, 0) * forwardMovement;
+
+            float addToRotation = 0;
+            
+            if (_frontWheelCurrentAngle > 0)
+            {
+                addToRotation = 1;
+            }
+            else if (_frontWheelCurrentAngle < 0)
+            {
+                addToRotation = -1;
+            }
+            
+            
+            Quaternion rotation = Quaternion.Euler(0, addToRotation , 0); // 10 degrees rotation around the y-axis (right)
+            Vector3 newDirection = rotation * transform.forward;
+
+// Apply the new direction to the transform
+            transform.forward = newDirection;
+            
+            
+            //_rigidbody.AddForce(transform.forward * _currentForce * 100, ForceMode.Acceleration);
+            transform.localPosition += transform.forward * _currentForce * Time.fixedDeltaTime * 10;
+            
+            //Debug.Log("transform.forward: " + transform.forward);
+            
+           
+            
+            // Create a gizmo for the forward movement
+            //Debug.DrawRay(transform.position, forwardMovement, Color.yellow);
         }
 
         // Rotate the front wheels
@@ -103,6 +142,9 @@ public class CarScript : MonoBehaviour
         {
             _currentForce = 0;
             
+            // Wheels come back to normal if stopped
+            //_frontWheelCurrentAngle = 0;
+
             //Debug.Log("Current force: " + _currentForce + ", velocity: " + _rigidbody.velocity);
         }
         else if (_currentForce > 0)
@@ -123,13 +165,13 @@ public class CarScript : MonoBehaviour
         {
             _frontWheelCurrentAngle = 0;
         }
-        else if (_frontWheelCurrentAngle > 0)
+        else if ((_frontWheelCurrentAngle > 0) && (_currentForce != 0))
         {
             _frontWheelCurrentAngle -= _wheelReturnForce;
             
             //Debug.Log("_frontWheelCurrentAngle: " + _frontWheelCurrentAngle);
         }
-        else if (_frontWheelCurrentAngle < 0)
+        else if ((_frontWheelCurrentAngle < 0) && (_currentForce != 0))
         {
             _frontWheelCurrentAngle += _wheelReturnForce;
             
@@ -141,15 +183,21 @@ public class CarScript : MonoBehaviour
         {
             if (_frontWheelCurrentAngle > 0)
             {
-                transform.Rotate(0, _wheelRotetaForce, 0);    
+                //transform.Rotate(0, _wheelRotetaForce, 0);    
             }
             else
             {
-                transform.Rotate(0, -_wheelRotetaForce, 0);
+                //transform.Rotate(0, -_wheelRotetaForce, 0);
             }
-            
         }
+        
+        // Set the rotation to _frontWheelCurrentAngle
+        //transform.localEulerAngles = new Vector3(0, _frontWheelCurrentAngle, 0);
 
+        // Get size of velocity
+        float velocity = _rigidbody.velocity.magnitude;
+
+        // Debug.Log("_frontWheelCurrentAngle: " + _frontWheelCurrentAngle + ", _currentForce: " + _currentForce + ", velocity: " + velocity);
     }
 
     private void TriggerEnterOnCar(Collider other, bool isEnter)
@@ -165,11 +213,19 @@ public class CarScript : MonoBehaviour
     
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("collision enter: " + other.gameObject.name);
+        if (other.gameObject.tag.Equals("🎈MainTrack"))
+        {
+            Debug.Log("Entering main track");
+        }
+        //Debug.Log("collision enter: " + other.gameObject.name);
     }
     
     private void OnCollisionExit(Collision other)
     {
-        Debug.Log("collision exit: " + other.gameObject.name);
+        if (other.gameObject.tag.Equals("🎈MainTrack"))
+        {
+            Debug.Log("Exiting main track");
+        }
+        //Debug.Log("collision exit: " + other.gameObject.name);
     }
 }
