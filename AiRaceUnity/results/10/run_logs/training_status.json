@@ -1,0 +1,29 @@
+{
+    "DriveTrack": {
+        "checkpoints": [
+            {
+                "steps": 4800,
+                "file_path": "results\\10\\DriveTrack\\DriveTrack-4800.onnx",
+                "reward": null,
+                "creation_time": 1724834185.8207383,
+                "auxillary_file_paths": [
+                    "results\\10\\DriveTrack\\DriveTrack-4800.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 4800,
+            "file_path": "results\\10\\DriveTrack.onnx",
+            "reward": null,
+            "creation_time": 1724834185.8207383,
+            "auxillary_file_paths": [
+                "results\\10\\DriveTrack\\DriveTrack-4800.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.7.0+cu110"
+    }
+}

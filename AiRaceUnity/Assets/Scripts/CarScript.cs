@@ -71,11 +71,14 @@ public class CarScript : MonoBehaviour
     }
     
     /// <summary>
-    /// Set the angle of the front wheels between -30 and 30
+    /// Set the angle of the front wheels between -1 and 1
     /// </summary>
     /// <param name="angle"></param>
     public void SetWheelAngle(float angle)
     {
+        // Transform to "real" angle
+        angle *= 30; 
+        
         // Set the angle of the front wheels
         _frontWheelCurrentAngle += angle;
         
