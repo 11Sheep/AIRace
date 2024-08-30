@@ -15,22 +15,31 @@ public class CarAgent : Agent
     /// </summary>
     private Action<float, float> _moveCar;
     
-    public void Initialize(Action<float, float> moveCar)
+    /// <summary>
+    /// Callback to reset the enviournment
+    /// </summary>
+    private Action _resetEnv; 
+    
+    public void Initialize(Action<float, float> moveCar, Action resetEnv)
     {
         _moveCar = moveCar;
+        _resetEnv = resetEnv;
     }
     
     /// <summary>
     /// Set the absolute position of the next marker
     /// </summary>
     /// <param name="nextMarkerPosition"></param>
-    public void CheckpointReached(Vector3 nextMarkerPosition)
+    public void ReachedMarker(Vector3 nextMarkerPosition, bool givePrize)
     {
         _nextMarkerPosition = nextMarkerPosition;
-        
-        AddReward(5);
-        
-        Debug.Log("Checkpoint reached, +5 reward");
+
+        if (givePrize)
+        {
+            Debug.Log("Checkpoint reached");
+            
+            AddRewardHelperFuncion(5);
+        }
     }
     
     /// <summary>
@@ -41,9 +50,9 @@ public class CarAgent : Agent
     {
         if (!onTrack)
         {
-            AddReward(-1);
+            Debug.Log("Car is off track");
             
-            Debug.Log("Car is off track, -1 reward");
+            AddRewardHelperFuncion(-1);
             
             EndEpisode();
         }
@@ -63,6 +72,31 @@ public class CarAgent : Agent
         
         _moveCar?.Invoke(acceleration, steering);
     }
+    
+    public void UpdateCarPositionReward()
+    {
+        float distance = Vector3.Distance(transform.position, _nextMarkerPosition);
+        float maxDistance = 10f;
+        
+        if (distance > maxDistance)
+        {
+            distance = maxDistance;
+        }
+        
+        // Normalize the reward so it's between 0 and 0.2f, closer to the marker, higher the reward
+        float rewardToAdd = (1f - distance / maxDistance) * 0.2f;
+        
+        Debug.Log("Distance: " + distance + ", reward: " + rewardToAdd);
+        
+        AddRewardHelperFuncion(rewardToAdd);
+    }
+
+    private void AddRewardHelperFuncion(float reward)
+    {
+        Debug.Log("Adding reward: " + reward);
+        
+        AddReward(reward);
+    }
 
     public override void CollectObservations(VectorSensor sensor)
     {
@@ -73,6 +107,6 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Reset the car position and state
-        // TODO:
+        _resetEnv?.Invoke();
     }
 }

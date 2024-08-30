@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CarAgent.cs" />
     <Compile Include="Assets\Scripts\Utils\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\CarController.cs" />
     <Compile Include="Assets\Scripts\Utils\JsonHelper.cs" />
     <Compile Include="Assets\Scripts\MarkerScript.cs" />
     <Compile Include="Assets\Scripts\AppConfiguration.cs" />

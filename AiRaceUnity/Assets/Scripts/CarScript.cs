@@ -38,14 +38,20 @@ public class CarScript : MonoBehaviour
     /// </summary>
     private Action<MarkerScript> _carHitMarker;
     
+    /// <summary>
+    /// Callback for the parent to know if the car is on track or off track
+    /// </summary>
+    private Action<bool> _onTrack;
+    
     private void Start()
     {
         _triggerCollector.SetTriggerEnterAction(TriggerEnterOnCar);
     }
     
-    public void Initialize(Action<MarkerScript> carHitMarker)
+    public void Initialize(Action<MarkerScript> carHitMarker, Action<bool> onTrack)
     {
         _carHitMarker = carHitMarker;
+        _onTrack = onTrack;
     }
     
     /// <summary>
@@ -54,7 +60,9 @@ public class CarScript : MonoBehaviour
     /// <param name="force"></param>
     public void Move(float force)
     {
-        if (_rigidbody.velocity.magnitude < 10)
+        //Debug.Log("Car velocity: " + _rigidbody.velocity.magnitude);
+        
+        if (_rigidbody.velocity.magnitude < 2)
         {
             _currentForce += force;
 
@@ -216,19 +224,33 @@ public class CarScript : MonoBehaviour
     
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag.Equals("🎈MainTrack"))
+        if (other.gameObject.CompareTag("MainTrack"))
         {
             Debug.Log("Entering main track");
+            
+            _onTrack?.Invoke(true);
         }
+        
         //Debug.Log("collision enter: " + other.gameObject.name);
     }
     
     private void OnCollisionExit(Collision other)
     {
-        if (other.gameObject.tag.Equals("🎈MainTrack"))
+        if (other.gameObject.CompareTag("MainTrack"))
         {
             Debug.Log("Exiting main track");
+            
+            _onTrack?.Invoke(false);
         }
         //Debug.Log("collision exit: " + other.gameObject.name);
+    }
+
+    public void ResetEnv()
+    {
+        _rigidbody.angularVelocity = Vector3.zero;
+        _rigidbody.velocity = Vector3.zero;
+
+        _currentForce = 0;
+        _frontWheelCurrentAngle = 0;
     }
 }

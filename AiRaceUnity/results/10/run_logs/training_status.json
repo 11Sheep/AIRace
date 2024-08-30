@@ -2,22 +2,31 @@
     "DriveTrack": {
         "checkpoints": [
             {
-                "steps": 4800,
-                "file_path": "results\\10\\DriveTrack\\DriveTrack-4800.onnx",
+                "steps": 499995,
+                "file_path": "results\\10\\DriveTrack\\DriveTrack-499995.onnx",
                 "reward": null,
-                "creation_time": 1724834185.8207383,
+                "creation_time": 1724920176.2053747,
                 "auxillary_file_paths": [
-                    "results\\10\\DriveTrack\\DriveTrack-4800.pt"
+                    "results\\10\\DriveTrack\\DriveTrack-499995.pt"
+                ]
+            },
+            {
+                "steps": 500059,
+                "file_path": "results\\10\\DriveTrack\\DriveTrack-500059.onnx",
+                "reward": null,
+                "creation_time": 1724920176.2454169,
+                "auxillary_file_paths": [
+                    "results\\10\\DriveTrack\\DriveTrack-500059.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 4800,
+            "steps": 500059,
             "file_path": "results\\10\\DriveTrack.onnx",
             "reward": null,
-            "creation_time": 1724834185.8207383,
+            "creation_time": 1724920176.2454169,
             "auxillary_file_paths": [
-                "results\\10\\DriveTrack\\DriveTrack-4800.pt"
+                "results\\10\\DriveTrack\\DriveTrack-500059.pt"
             ]
         }
     },

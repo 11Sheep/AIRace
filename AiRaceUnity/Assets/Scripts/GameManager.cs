@@ -23,18 +23,29 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CarAgent _carAgent;
     
     /// <summary>
-    /// This will be used to 
+    /// Keep the original car transform so we can reset the car position
     /// </summary>
-    [SerializeField] private TriggerCollector _outerTrackTriggerCollector;
+    private Transform _originalCarTransform; 
     
     private int _currentMarkerIndex = 0;
+
+    /// <summary>
+    /// This will count the time the car is off track
+    /// </summary>
+    private float _offTrackCounter = 0;
+
+    private float _updateCarPositionForRewardTime = 0.2f;
     
     private void Start()
     {
-        _carScript.Initialize(CarHitMarker);
-        _carAgent.Initialize(OnMoveCarAction);
-        _carAgent.CheckpointReached(_markers[_currentMarkerIndex].gameObject.transform.position);
-        _outerTrackTriggerCollector.SetTriggerEnterAction(OnCarTrackTrigger);
+        // Duplicate the transform by copying the values
+        _originalCarTransform = new GameObject().transform;
+        _originalCarTransform.position = _carScript.transform.position;
+        _originalCarTransform.rotation = _carScript.transform.rotation;
+        
+        _carScript.Initialize(CarHitMarker, OnCarTrackTrigger);
+        _carAgent.Initialize(OnMoveCarAction, OnResetEnv);
+        _carAgent.ReachedMarker(_markers[_currentMarkerIndex].gameObject.transform.position, false);
     }
     
     private void OnMoveCarAction(float acceleration, float steering)
@@ -42,10 +53,34 @@ public class GameManager : MonoBehaviour
         _carScript.Move(acceleration);
         _carScript.SetWheelAngle(steering);
     }
+    
+    private void OnResetEnv()
+    {
+        Debug.Log("Resetting the environment");
+        
+        _currentMarkerIndex = 0;
+        _carAgent.ReachedMarker(_markers[_currentMarkerIndex].gameObject.transform.position, false);
+
+        _carScript.transform.position = _originalCarTransform.position;
+        _carScript.transform.rotation = _originalCarTransform.rotation;
+        _carScript.ResetEnv();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        if (_offTrackCounter > 0)
+        {
+            _offTrackCounter -= Time.deltaTime;
+
+            if (_offTrackCounter <= 0)
+            {
+                _offTrackCounter = 0;
+                
+                _carAgent.SetOnTrackIndication(false);
+            } 
+        }
+        
         if (Input.GetKey(KeyCode.UpArrow))
         {
             _carScript.Move(_forceToAdd);
@@ -62,6 +97,15 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKey(KeyCode.RightArrow))
         {
             _carScript.SetWheelAngle(10f / 30f);
+        }
+
+        _updateCarPositionForRewardTime -= Time.deltaTime;
+
+        if (_updateCarPositionForRewardTime <= 0)
+        {
+            _updateCarPositionForRewardTime = 0.2f;
+            
+            _carAgent.UpdateCarPositionReward();
         }
     }
     
@@ -84,17 +128,21 @@ public class GameManager : MonoBehaviour
             
             _currentMarkerIndex++;
             
-            _carAgent.CheckpointReached(_markers[_currentMarkerIndex].gameObject.transform.position);
+            _carAgent.ReachedMarker(_markers[_currentMarkerIndex].gameObject.transform.position, true);
         }
     }
     
-    private void OnCarTrackTrigger(Collider colider, bool isEnter)
+    private void OnCarTrackTrigger(bool isEnter)
     {
         Debug.Log("Track trigger changed: " + isEnter);
         
         if (!isEnter)
         {
-            _carAgent.SetOnTrackIndication(false);
+            _offTrackCounter = 0.3f;
+        }
+        else
+        {
+            _offTrackCounter = 0;
         }
     }
 }

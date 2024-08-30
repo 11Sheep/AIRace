@@ -547,7 +547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2344644785027655496, guid: a8de3a4df05c04344896daaef37210ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.07
+      value: -3.18
       objectReference: {fileID: 0}
     - target: {fileID: 2344644785027655496, guid: a8de3a4df05c04344896daaef37210ee, type: 3}
       propertyPath: m_LocalPosition.z
@@ -592,6 +592,10 @@ PrefabInstance:
     - target: {fileID: 3153094435491544562, guid: a8de3a4df05c04344896daaef37210ee, type: 3}
       propertyPath: m_Name
       value: Car
+      objectReference: {fileID: 0}
+    - target: {fileID: 3153094435491544562, guid: a8de3a4df05c04344896daaef37210ee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3942954925332088370, guid: a8de3a4df05c04344896daaef37210ee, type: 3}
       propertyPath: m_IsActive
@@ -856,7 +860,6 @@ MonoBehaviour:
   - {fileID: 812531219}
   _carScript: {fileID: 1897398392}
   _carAgent: {fileID: 1897398394}
-  _outerTrackTriggerCollector: {fileID: 531052481}
 --- !u!4 &846901810
 Transform:
   m_ObjectHideFlags: 0
@@ -1404,7 +1407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78841ddd7b9b204dbbd5082df6ce8ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxForce: 3
+  _maxForce: 0.1
   _lowerForceLimitToStop: 0.0005
   _fictionForce: 0.01
   _lowerWheelAngleToReset: 0.5
@@ -1467,7 +1470,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: DriveTrack
   TeamId: 0
   m_UseChildSensors: 1
