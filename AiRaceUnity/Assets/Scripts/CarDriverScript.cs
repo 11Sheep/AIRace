@@ -9,6 +9,11 @@ using UnityEngine;
 public class CarDriverScript : Agent
 {
     /// <summary>
+    /// Count the time in the wall so we can reset the car if needed
+    /// </summary>
+    private float _inWallCounter;
+    
+    /// <summary>
     /// Keep the original car position so we can reset the car position
     /// </summary>
     private Vector3 _originalCarPosition;
@@ -115,7 +120,18 @@ public class CarDriverScript : Agent
     {
         if (other.gameObject.CompareTag("Wall"))
         {
-            AddRewardHelper(-0.1f);
+            if (_inWallCounter + 2f < Time.time)
+            {
+                Debug.Log("Car is stuck in the wall");
+                
+                AddRewardHelper(-1f);
+                
+                EndEpisode();
+            }
+            else
+            {
+                AddRewardHelper(-0.1f);
+            }
         }
     }
     
@@ -123,10 +139,12 @@ public class CarDriverScript : Agent
     {
         if (other.gameObject.CompareTag("Wall"))
         {
+            _inWallCounter = Time.time;
+            
             AddRewardHelper(-0.5f);
         }
     }
-
+    
     private void AddRewardHelper(float reward)
     {
         Debug.Log("Adding reward: " + reward);
