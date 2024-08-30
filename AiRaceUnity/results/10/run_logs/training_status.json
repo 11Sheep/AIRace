@@ -1,32 +1,23 @@
 {
-    "DriveTrack": {
+    "CarModel": {
         "checkpoints": [
             {
-                "steps": 499995,
-                "file_path": "results\\10\\DriveTrack\\DriveTrack-499995.onnx",
+                "steps": 10304,
+                "file_path": "results\\10\\CarModel\\CarModel-10304.onnx",
                 "reward": null,
-                "creation_time": 1724920176.2053747,
+                "creation_time": 1725025457.5253258,
                 "auxillary_file_paths": [
-                    "results\\10\\DriveTrack\\DriveTrack-499995.pt"
-                ]
-            },
-            {
-                "steps": 500059,
-                "file_path": "results\\10\\DriveTrack\\DriveTrack-500059.onnx",
-                "reward": null,
-                "creation_time": 1724920176.2454169,
-                "auxillary_file_paths": [
-                    "results\\10\\DriveTrack\\DriveTrack-500059.pt"
+                    "results\\10\\CarModel\\CarModel-10304.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500059,
-            "file_path": "results\\10\\DriveTrack.onnx",
+            "steps": 10304,
+            "file_path": "results\\10\\CarModel.onnx",
             "reward": null,
-            "creation_time": 1724920176.2454169,
+            "creation_time": 1725025457.5253258,
             "auxillary_file_paths": [
-                "results\\10\\DriveTrack\\DriveTrack-500059.pt"
+                "results\\10\\CarModel\\CarModel-10304.pt"
             ]
         }
     },

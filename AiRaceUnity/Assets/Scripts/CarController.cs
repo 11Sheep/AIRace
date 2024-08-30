@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    /// <summary>
+    /// Control the car ML agent
+    /// </summary>
+    [SerializeField] private CarDriverScript _carDriverScript;
+    
     private float horizontalInput, verticalInput;
     private float currentSteerAngle, currentbreakForce;
     private bool isBreaking;
@@ -20,6 +25,35 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
 
+    /// <summary>
+    /// Markers on track for AI learning
+    /// </summary>
+    private MarkerScript[] _markers;
+
+    private int _currentMarkerIndex;
+    
+    public void Initialize(MarkerScript[] markers)
+    {
+        _carDriverScript.Initialize(transform.position, transform.rotation, StopCar, markers[0].transform, MoveCar);
+        _markers = markers;
+        _currentMarkerIndex = 0;
+    }
+
+    private void MoveCar(float acceleration, float steering)
+    {
+        verticalInput = acceleration;
+        horizontalInput = steering;
+    }
+
+    private void StopCar()
+    {
+        frontLeftWheelCollider.motorTorque = 0;
+        frontRightWheelCollider.motorTorque = 0;
+        rearLeftWheelCollider.motorTorque = 0;
+        rearRightWheelCollider.motorTorque = 0;
+    }
+
+
     private void FixedUpdate() {
         GetInput();
         HandleMotor();
@@ -28,14 +62,52 @@ public class CarController : MonoBehaviour
     }
 
     private void GetInput() {
-        // Steering Input
-        horizontalInput = Input.GetAxis("Horizontal");
+        if (false)
+        {
 
-        // Acceleration Input
-        verticalInput = Input.GetAxis("Vertical");
+            // Steering Input
+            horizontalInput = Input.GetAxis("Horizontal");
+
+            // Acceleration Input
+            verticalInput = Input.GetAxis("Vertical");
+
+            if (Mathf.Abs(verticalInput) < 0.1f)
+            {
+                verticalInput = 0;
+            }
+            else if (verticalInput < 0)
+            {
+                verticalInput = -1;
+            }
+            else
+            {
+                verticalInput = 1;
+            }
+
+            if (Mathf.Abs(horizontalInput) < 0.1f)
+            {
+                horizontalInput = 0;
+            }
+            else if (horizontalInput < 0)
+            {
+                horizontalInput = -1;
+            }
+            else
+            {
+                horizontalInput = 1;
+            }
+        }
+
+        // Debug.Log("Horizontal: " + horizontalInput + " Vertical: " + verticalInput);
 
         // Breaking Input
         isBreaking = Input.GetKey(KeyCode.Space);
+    }
+    
+    public void SetInputs(float horizontal, float vertical)
+    {
+        horizontalInput = horizontal;
+        verticalInput = vertical;
     }
 
     private void HandleMotor() {
@@ -71,5 +143,25 @@ public class CarController : MonoBehaviour
         wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Marker"))
+        {
+            if (other.GetComponent<MarkerScript>() == _markers[_currentMarkerIndex])
+            {
+                Debug.Log("Reached marker: " + _currentMarkerIndex);
+                
+                _currentMarkerIndex++;
+                _carDriverScript.OnReachedCorrectMarker(_markers[_currentMarkerIndex].transform);
+            }
+            else
+            {
+                Debug.Log("Reached wrong marker");
+                
+                _carDriverScript.OnReachedWrongCheckpoint();
+            }
+        }
     }
 }

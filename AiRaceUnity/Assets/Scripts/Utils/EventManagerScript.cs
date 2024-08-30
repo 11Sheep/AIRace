@@ -13,8 +13,6 @@ public class EventManagerScript : Singleton<EventManagerScript>
 
     public class FloatEvent : UnityEvent<object> {} //empty class; just needs to exist
 
-    public const string EVENT__CAR_ON_TRACK_SENSOR = "event_carOnTrackSensor";
-
     private Dictionary <string, FloatEvent> eventDictionary;
 	
 	private void Init ()
