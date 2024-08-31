@@ -64,7 +64,6 @@ public class CarController : MonoBehaviour
     private void GetInput() {
         if (false)
         {
-
             // Steering Input
             horizontalInput = Input.GetAxis("Horizontal");
 
@@ -104,12 +103,6 @@ public class CarController : MonoBehaviour
         isBreaking = Input.GetKey(KeyCode.Space);
     }
     
-    public void SetInputs(float horizontal, float vertical)
-    {
-        horizontalInput = horizontal;
-        verticalInput = vertical;
-    }
-
     private void HandleMotor() {
         frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
         frontRightWheelCollider.motorTorque = verticalInput * motorForce;
@@ -153,7 +146,19 @@ public class CarController : MonoBehaviour
             {
                 Debug.Log("Reached marker: " + _currentMarkerIndex);
                 
-                _currentMarkerIndex++;
+                if (_currentMarkerIndex < _markers.Length - 1)
+                {
+                    _currentMarkerIndex++;
+                }
+                else
+                {
+                    Debug.Log("Reached last marker");
+                    
+                    _carDriverScript.OnReachedLastMarker();
+                    
+                    _currentMarkerIndex = 0;
+                }
+                
                 _carDriverScript.OnReachedCorrectMarker(_markers[_currentMarkerIndex].transform);
             }
             else

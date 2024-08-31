@@ -58,8 +58,8 @@ public class CarDriverScript : Agent
         if (Input.GetKey(KeyCode.UpArrow)) fowrardAction = 1;
         if (Input.GetKey(KeyCode.DownArrow)) fowrardAction = 2;
         
-        if (Input.GetKey(KeyCode.LeftArrow)) steeringAction = 1;
-        if (Input.GetKey(KeyCode.RightArrow)) steeringAction = 2;
+        if (Input.GetKey(KeyCode.RightArrow)) steeringAction = 1;
+        if (Input.GetKey(KeyCode.LeftArrow)) steeringAction = 2;
         
         ActionSegment<int> discreteActions = actionsOut.DiscreteActions;
         discreteActions[0] = fowrardAction;
@@ -85,7 +85,7 @@ public class CarDriverScript : Agent
         float acceleration = 0;
         float steering = 0;
         
-        Debug.Log("Action: " + actions.DiscreteActions[0] + ", " + actions.DiscreteActions[1]);
+        // Debug.Log("Action: " + actions.DiscreteActions[0] + ", " + actions.DiscreteActions[1]);
         
         switch (actions.DiscreteActions[0])
         {
@@ -147,8 +147,14 @@ public class CarDriverScript : Agent
     
     private void AddRewardHelper(float reward)
     {
-        Debug.Log("Adding reward: " + reward);
+        // Debug.Log("Adding reward: " + reward);
         
         AddReward(reward);
+    }
+
+    public void OnReachedLastMarker()
+    {
+        // Finished track
+        AddRewardHelper(10);
     }
 }
