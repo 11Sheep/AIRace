@@ -30,7 +30,7 @@ public class CarController : MonoBehaviour
     /// </summary>
     private MarkerScript[] _markers;
 
-    private int _currentMarkerIndex;
+    private int _currentMarkerIndex; 
     
     public void Initialize(MarkerScript[] markers)
     {
@@ -51,6 +51,8 @@ public class CarController : MonoBehaviour
         frontRightWheelCollider.motorTorque = 0;
         rearLeftWheelCollider.motorTorque = 0;
         rearRightWheelCollider.motorTorque = 0;
+        
+        _currentMarkerIndex = 0;
     }
 
 
@@ -104,10 +106,17 @@ public class CarController : MonoBehaviour
     }
     
     private void HandleMotor() {
-        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+        // Debug.Log("Speed: " + frontLeftWheelCollider.rpm +", motorTorque: " + verticalInput * motorForce);
+        
+        // Limit speed
+        if (frontLeftWheelCollider.rpm < 1000)
+        {
+            frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+            frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+        }
+        
         currentbreakForce = isBreaking ? breakForce : 0f;
-        ApplyBreaking();
+        ApplyBreaking();    
     }
 
     private void ApplyBreaking() {
@@ -159,13 +168,13 @@ public class CarController : MonoBehaviour
                     _currentMarkerIndex = 0;
                 }
                 
-                _carDriverScript.OnReachedCorrectMarker(_markers[_currentMarkerIndex].transform);
+                _carDriverScript.OnReachedCorrectMarker(_markers[_currentMarkerIndex].transform, _currentMarkerIndex);
             }
             else
             {
                 Debug.Log("Reached wrong marker");
                 
-                _carDriverScript.OnReachedWrongCheckpoint();
+                //_carDriverScript.OnReachedWrongCheckpoint();
             }
         }
     }

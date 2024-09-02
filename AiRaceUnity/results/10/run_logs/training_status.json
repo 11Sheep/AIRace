@@ -2,22 +2,22 @@
     "CarModel": {
         "checkpoints": [
             {
-                "steps": 323951,
-                "file_path": "results\\10\\CarModel\\CarModel-323951.onnx",
+                "steps": 2240,
+                "file_path": "results\\10\\CarModel\\CarModel-2240.onnx",
                 "reward": null,
-                "creation_time": 1725028071.176882,
+                "creation_time": 1725095144.3327367,
                 "auxillary_file_paths": [
-                    "results\\10\\CarModel\\CarModel-323951.pt"
+                    "results\\10\\CarModel\\CarModel-2240.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 323951,
+            "steps": 2240,
             "file_path": "results\\10\\CarModel.onnx",
             "reward": null,
-            "creation_time": 1725028071.176882,
+            "creation_time": 1725095144.3327367,
             "auxillary_file_paths": [
-                "results\\10\\CarModel\\CarModel-323951.pt"
+                "results\\10\\CarModel\\CarModel-2240.pt"
             ]
         }
     },

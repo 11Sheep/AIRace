@@ -50,6 +50,7 @@
     <Compile Include="Assets\Scripts\Utils\AudioManager.cs" />
     <Compile Include="Assets\Scripts\CarController.cs" />
     <Compile Include="Assets\Scripts\Utils\JsonHelper.cs" />
+    <Compile Include="Assets\Scripts\TestSC.cs" />
     <Compile Include="Assets\Scripts\MarkerScript.cs" />
     <Compile Include="Assets\Scripts\AppConfiguration.cs" />
     <Compile Include="Assets\Scripts\CarScript.cs" />
