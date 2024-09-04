@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
@@ -9,6 +10,8 @@ public class CarController : MonoBehaviour
     /// Control the car ML agent
     /// </summary>
     [SerializeField] private CarDriverScript _carDriverScript;
+
+    [SerializeField] private Rigidbody _rigidbody;
     
     private float horizontalInput, verticalInput;
     private float currentSteerAngle, currentbreakForce;
@@ -32,11 +35,18 @@ public class CarController : MonoBehaviour
 
     private int _currentMarkerIndex; 
     
+    private Vector3 _carPositionForChecking;
+
+    private float _positionCheckTime;
+    
     public void Initialize(MarkerScript[] markers)
     {
         _carDriverScript.Initialize(transform.position, transform.rotation, StopCar, markers[0].transform, MoveCar);
         _markers = markers;
         _currentMarkerIndex = 0;
+
+        _carPositionForChecking = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        _positionCheckTime = Time.time;
     }
 
     private void MoveCar(float acceleration, float steering)
@@ -47,10 +57,7 @@ public class CarController : MonoBehaviour
 
     private void StopCar()
     {
-        frontLeftWheelCollider.motorTorque = 0;
-        frontRightWheelCollider.motorTorque = 0;
-        rearLeftWheelCollider.motorTorque = 0;
-        rearRightWheelCollider.motorTorque = 0;
+        _rigidbody.velocity = Vector3.zero;
         
         _currentMarkerIndex = 0;
     }
@@ -61,6 +68,25 @@ public class CarController : MonoBehaviour
         HandleMotor();
         HandleSteering();
         UpdateWheels();
+    }
+
+    private void Update()
+    {
+        if (Time.time - _positionCheckTime > 5f)
+        {
+            // Check if the car was moved in the last 5 seconds
+            
+            if (Vector3.Distance(_carPositionForChecking, transform.position) < 0.2f)
+            {
+                Debug.Log("Car is stuck");
+                
+                // _carDriverScript.CarIsStuck();
+            }
+
+            // Reset the position and time check
+            _positionCheckTime = Time.time;
+            _carPositionForChecking = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        }
     }
 
     private void GetInput() {

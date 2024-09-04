@@ -45,7 +45,7 @@ public class CarDriverScript : Agent
         _nextMarker = nextMarker;
 
         // TODO: just for testing in the beginning
-        if (markerIndex == 10)
+        if (markerIndex == 100)
         {
             EndEpisode();
         }
@@ -202,7 +202,14 @@ public class CarDriverScript : Agent
     public void OnReachedLastMarker()
     {
         // Finished track
-        AddRewardHelper(10);
+        AddRewardHelper(20);
+        
+        EndEpisode();
+    }
+
+    public void CarIsStuck()
+    {
+        AddRewardHelper(-2);
         
         EndEpisode();
     }
