@@ -35,7 +35,7 @@ behaviors:
           deterministic: false
       gail:
         strength: 0.5
-        demo_path: Demos/cardemo_8.demo
+        demo_path: Demos/cardemo_9.demo
         
     init_path: null
     keep_checkpoints: 5
@@ -47,7 +47,7 @@ behaviors:
     self_play: null
     behavioral_cloning:
         strength: 0.5
-        demo_path: Demos/cardemo_8.demo
+        demo_path: Demos/cardemo_9.demo
       
 env_settings:
   env_path: null

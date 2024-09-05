@@ -45,7 +45,7 @@ public class CarDriverScript : Agent
         _nextMarker = nextMarker;
 
         // TODO: just for testing in the beginning
-        if (markerIndex == 100)
+        if (markerIndex == 176)
         {
             EndEpisode();
         }
@@ -168,7 +168,7 @@ public class CarDriverScript : Agent
             {
                 // Debug.Log("Car is stuck in the wall");
                 
-                AddRewardHelper(-3f);
+                AddRewardHelper(-10f);
                 
                 EndEpisode();
             }
