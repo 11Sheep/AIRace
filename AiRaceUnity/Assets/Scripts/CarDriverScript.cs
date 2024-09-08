@@ -45,8 +45,11 @@ public class CarDriverScript : Agent
         _nextMarker = nextMarker;
 
         // TODO: just for testing in the beginning
-        if (markerIndex == 176)
+        if (markerIndex == 175)
         {
+            // Finished track
+            AddRewardHelper(20);
+        
             EndEpisode();
         }
     }
@@ -164,7 +167,7 @@ public class CarDriverScript : Agent
     {
         if (other.gameObject.CompareTag("Wall"))
         {
-            if (_inWallCounter + 5f < Time.time)
+            if (_inWallCounter +12f < Time.time)
             {
                 // Debug.Log("Car is stuck in the wall");
                 
